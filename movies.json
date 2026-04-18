@@ -8,42 +8,44 @@
     "year": "2025"
   },
   {
-  "type": "series",
-  "title": "Positively Yours Sub Indo",
-  "poster": "https://www.dailymotion.com/thumbnail/video/xa5pfsy",
-  "genre": "Drama",
-  "year": "2026",
-  "episodes": [
-    {
-      "ep": "Episode 1",
-      "embed": "https://www.dailymotion.com/embed/video/xa5pfsy"
-    },
-    {
-      "ep": "Episode 2",
-      "embed": "https://www.dailymotion.com/embed/video/xa5pr62"
-    },
-    {
-      "ep": "Episode 3",
-      "embed": "https://www.dailymotion.com/embed/video/xa5qihe"
-    },
-    {
-      "ep": "Episode 4",
-      "embed": "https://www.dailymotion.com/embed/video/xa5qw5w"
-    },
-    {
-      "ep": "Episode 5",
-      "embed": "https://www.dailymotion.com/embed/video/xa5sauo"
-    },
-    {
-      "ep": "Episode 6",
-      "embed": "https://www.dailymotion.com/embed/video/xa5sg9o"
-    },
-    {
-      "ep": "Episode 7",
-      "embed": "https://www.dailymotion.com/embed/video/xa5sokc"
-    },
-    {
-      "ep": "Episode 8",
-      "embed": "https://www.dailymotion.com/embed/video/xa5ta9i"
-    }
-  ]
+    "type": "series",
+    "title": "Positively Yours Sub Indo",
+    "poster": "https://www.dailymotion.com/thumbnail/video/xa5pfsy",
+    "genre": "Drama",
+    "year": "2026",
+    "episodes": [
+      {
+        "ep": "Episode 1",
+        "embed": "https://www.dailymotion.com/embed/video/xa5pfsy"
+      },
+      {
+        "ep": "Episode 2",
+        "embed": "https://www.dailymotion.com/embed/video/xa5pr62"
+      },
+      {
+        "ep": "Episode 3",
+        "embed": "https://www.dailymotion.com/embed/video/xa5qihe"
+      },
+      {
+        "ep": "Episode 4",
+        "embed": "https://www.dailymotion.com/embed/video/xa5qw5w"
+      },
+      {
+        "ep": "Episode 5",
+        "embed": "https://www.dailymotion.com/embed/video/xa5sauo"
+      },
+      {
+        "ep": "Episode 6",
+        "embed": "https://www.dailymotion.com/embed/video/xa5sg9o"
+      },
+      {
+        "ep": "Episode 7",
+        "embed": "https://www.dailymotion.com/embed/video/xa5sokc"
+      },
+      {
+        "ep": "Episode 8",
+        "embed": "https://www.dailymotion.com/embed/video/xa5ta9i"
+      }
+    ]
+  }
+]
