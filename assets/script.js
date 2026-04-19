@@ -1,165 +1,150 @@
-// Sumber JSON
-const DATA_URL = "movies.json";
+// ===============================
+// KONFIGURASI
+// ===============================
+const DATA_URL = "https://raw.githubusercontent.com/jhonie07/nontongratis/main/movies.json";
 
-// Home Page
-if (document.getElementById("hero")) loadHome();
-if (document.getElementById("videoFrame")) loadPlayer();
+// ELEMENT
+const moviesEl = document.getElementById("movies");
+const categoriesEl = document.getElementById("categories");
+const searchEl = document.getElementById("search");
+const loadingEl = document.getElementById("loading");
 
-// Load Home Page
-async function loadHome() {
-    const res = await fetch(DATA_URL);
-    const data = await res.json();
 
-    window.DB = data;
+// ===============================
+// LOAD HOMEPAGE
+// ===============================
+async function loadMovies() {
+    try {
+        loadingEl.style.display = "block";
 
-    renderHero(data[0]);
-    renderCategories(data);
-    renderRows(data);
-    setupSearch(data);
+        const res = await fetch(DATA_URL + "?v=" + Date.now());
+        const data = await res.json();
+
+        loadingEl.style.display = "none";
+
+        window.ALL_MOVIES = data;
+
+        // Buat kategori otomatis
+        const categories = [...new Set(data.map(m => m.genre))];
+
+        categoriesEl.innerHTML = categories.map(c =>
+            `<button class="cat" onclick="filterCategory('${c}')">${c}</button>`
+        ).join("");
+
+        renderMovies(data);
+
+        // Search
+        searchEl.addEventListener("input", () => {
+            const key = searchEl.value.toLowerCase();
+            const filter = data.filter(m => m.title.toLowerCase().includes(key));
+            renderMovies(filter);
+        });
+
+    } catch (err) {
+        loadingEl.innerHTML = "Gagal memuat data";
+    }
 }
 
-// Hero Section
-function renderHero(m) {
-    const hero = document.getElementById("hero");
-    hero.style.backgroundImage = `url(${m.poster})`;
 
-    hero.innerHTML = `
-        <div class="hero-info">
-            <h1>${m.title}</h1>
-            <p>${m.genre} • ${m.year}</p>
-            <button onclick="play('${m.title}')">▶ Play</button>
+// ===============================
+// RENDER DAFTAR FILM
+// ===============================
+function renderMovies(list) {
+    if (!moviesEl) return;
+
+    moviesEl.innerHTML = list.map(m => `
+        <div class="card" onclick="openMovie('${encodeURIComponent(m.title)}')">
+            <img src="${m.poster}" alt="${m.title}">
+            <div class="title">${m.title}</div>
         </div>
-    `;
+    `).join("");
 }
 
-// Categories
-function renderCategories(data) {
-    const box = document.getElementById("categories");
-    const genres = [...new Set(data.map(m => m.genre))];
 
-    box.innerHTML = genres
-        .map(g => `<button class="cat-btn" onclick="filterGenre('${g}')">${g}</button>`)
-        .join("");
+// ===============================
+// FILTER KATEGORI
+// ===============================
+function filterCategory(cat) {
+    const filtered = window.ALL_MOVIES.filter(m => m.genre === cat);
+    renderMovies(filtered);
 }
 
-// Netflix Rows
-function renderRows(data) {
-    const movies = document.getElementById("movies");
-    const genres = [...new Set(data.map(m => m.genre))];
 
-    movies.innerHTML = genres.map(g => {
-        const list = data.filter(m => m.genre === g);
-
-        return `
-        <div class="row">
-            <h2>${g}</h2>
-            <div class="row-list">
-                ${list.map(m => `
-                    <div class="card" 
-                         onmouseenter="preview('${m.embed}', this)"
-                         onmouseleave="stopPreview(this)"
-                         onclick="openDetail('${m.title}')">
-
-                        <img src="${m.poster}">
-                        <iframe class="trailer" muted allowfullscreen></iframe>
-                    </div>
-                `).join("")}
-            </div>
-        </div>`;
-    }).join("");
+// ===============================
+// BUKA FILM
+// ===============================
+function openMovie(title) {
+    window.location.href = "player.html?title=" + title;
 }
 
-// Auto Trailer Preview
-function preview(url, card) {
-    card.querySelector(".trailer").src = url;
-}
-function stopPreview(card) {
-    card.querySelector(".trailer").src = "";
-}
 
-// Detail Modal
-function openDetail(title) {
-    const m = DB.find(x => x.title === title);
-
-    document.getElementById("modalBody").innerHTML = `
-        <h2>${m.title}</h2>
-        <p>${m.genre} • ${m.year}</p>
-        <button onclick="play('${m.title}')">▶ Putar</button>
-        <button onclick="saveFav('${m.title}')">♡ Favorit</button>
-    `;
-    document.getElementById("modal").style.display = "flex";
-}
-
-// Close Modal
-document.getElementById("modal").onclick = () => {
-    document.getElementById("modal").style.display = "none";
-};
-
-// Play Movie
-function play(title) {
-    location.href = "player.html?title=" + encodeURIComponent(title);
-}
-
-// Search
-function setupSearch(data) {
-    document.getElementById("search").oninput = e => {
-        const key = e.target.value.toLowerCase();
-        const found = data.filter(m => m.title.toLowerCase().includes(key));
-        renderRows(found);
-    };
-}
-
-function filterGenre(g) {
-    const found = DB.filter(m => m.genre === g);
-    renderRows(found);
-}
-
-// Favorite System
-function saveFav(title) {
-    let fav = JSON.parse(localStorage.getItem("fav") || "[]");
-
-    if (!fav.includes(title)) fav.push(title);
-
-    localStorage.setItem("fav", JSON.stringify(fav));
-}
-
-// Player Page
+// ===============================
+// LOAD PLAYER
+// ===============================
 async function loadPlayer() {
-    const q = new URLSearchParams(location.search);
-    const title = decodeURIComponent(q.get("title"));
+    const p = new URLSearchParams(window.location.search);
+    const title = decodeURIComponent(p.get("title"));
 
-    const res = await fetch(DATA_URL);
+    if (!title) return;
+
+    // Ambil data fresh
+    const res = await fetch(DATA_URL + "?v=" + Date.now());
     const data = await res.json();
-    const m = data.find(x => x.title === title);
 
-    document.getElementById("title").innerText = m.title;
-    document.getElementById("info").innerText = m.genre + " • " + m.year;
+    const movie = data.find(m => m.title === title);
+    if (!movie) return;
 
-    // History
-    localStorage.setItem("last_watch", title);
+    const frame = document.getElementById("videoFrame");
+    const titleEl = document.getElementById("title");
+    const infoEl = document.getElementById("info");
+    const epList = document.getElementById("recommend");
 
-    if (m.type === "movie") {
-        document.getElementById("videoFrame").src = m.embed;
+    titleEl.innerText = movie.title;
+    infoEl.innerText = movie.genre + " • " + movie.year;
+
+    // ============================
+    // MOVIE MODE
+    // ============================
+    if (movie.type === "movie") {
+        frame.src = movie.embed;
+        return;
     }
 
-    if (m.type === "series") {
-        document.getElementById("videoFrame").src = m.episodes[0].embed;
+    // ============================
+    // SERIES MODE
+    // ============================
+    if (movie.type === "series") {
+        if (!movie.episodes || movie.episodes.length === 0) {
+            frame.src = "";
+            epList.innerHTML = "<p>Tidak ada episode.</p>";
+            return;
+        }
 
-        document.getElementById("episodes").innerHTML =
-            m.episodes.map(ep =>
-                `<button onclick="changeEp('${ep.embed}')">${ep.ep}</button>`
-            ).join("");
+        // Episode pertama
+        frame.src = movie.episodes[0].embed;
 
-        const rec = data.filter(x => x.genre === m.genre && x.title !== m.title);
-
-        document.getElementById("recommend").innerHTML =
-            rec.map(r =>
-                `<div class="card" onclick="play('${r.title}')"><img src="${r.poster}"></div>`
-            ).join("");
+        // Buat tombol episode
+        epList.innerHTML = movie.episodes.map(ep => `
+            <button class="ep-btn" onclick="changeEp('${ep.embed}')">
+                ${ep.ep}
+            </button>
+        `).join("");
     }
 }
 
-// Change Episode
+
+// ===============================
+// GANTI EPISODE
+// ===============================
 function changeEp(url) {
     document.getElementById("videoFrame").src = url;
 }
+
+
+// ===============================
+// AUTO RUN
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+    if (moviesEl) loadMovies();
+    if (document.getElementById("videoFrame")) loadPlayer();
+});
