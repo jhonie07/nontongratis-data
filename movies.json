@@ -16,6 +16,22 @@
     "year": "2011"
   },
   {
+    "type": "movie",
+    "title": "3 iron",
+    "poster": "https://www.dailymotion.com/thumbnail/video/x9p1fgw",
+    "embed": "https://www.dailymotion.com/embed/video/x9p1fgw",
+    "genre": "action",
+    "year": "2004"
+  },
+  {
+    "type": "movie",
+    "title": "gangster",
+    "poster": "https://www.dailymotion.com/thumbnail/video/x8p30xj",
+    "embed": "https://www.dailymotion.com/embed/video/x8p30xj",
+    "genre": "action",
+    "year": "2023"
+  },
+  {
     "type": "series",
     "title": "Positively Yours Sub Indo",
     "poster": "https://www.dailymotion.com/thumbnail/video/xa5pfsy",
