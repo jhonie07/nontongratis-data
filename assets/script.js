@@ -1,115 +1,116 @@
-// ==========================================
+// URL JSON
+const JSON_URL = "https://nontongratis.online/movies.json";
+
+// ELEMENT
+const moviesEl = document.getElementById("movies");
+const categoriesEl = document.getElementById("categories");
+const searchEl = document.getElementById("search");
+const loadingEl = document.getElementById("loading");
+
+// ------------------------------
 // LOAD MOVIES
-// ==========================================
-
-const url = "/movies.json";   // FIX WAJIB
-
+// ------------------------------
 async function loadMovies() {
     try {
-        const res = await fetch(url);
+        loadingEl.style.display = "block";
+
+        const res = await fetch(JSON_URL + "?v=" + Date.now()); // anti-cache
         const data = await res.json();
 
-        document.getElementById("loading").style.display = "none";
+        loadingEl.style.display = "none";
 
-        showCategories(data);
-        showMovies(data);
+        // GROUP CATEGORY
+        const categories = [...new Set(data.map(m => m.genre))];
 
-        setupSearch(data);
+        categoriesEl.innerHTML = categories.map(c =>
+            `<button class="cat" onclick="filterCategory('${c}')">${c}</button>`
+        ).join("");
 
-    } catch (error) {
-        console.log(error);
-        document.getElementById("loading").innerHTML = "Gagal memuat data!";
+        renderMovies(data);
+
+        searchEl.addEventListener("input", () => {
+            const key = searchEl.value.toLowerCase();
+            const filter = data.filter(m => m.title.toLowerCase().includes(key));
+            renderMovies(filter);
+        });
+
+        window.ALL_MOVIES = data;
+
+    } catch (e) {
+        loadingEl.innerHTML = "Gagal Memuat Data";
     }
 }
 
-// ==========================================
-// CATEGORY AUTO
-// ==========================================
-
-function showCategories(data) {
-    const categories = [...new Set(data.map(m => m.genre))];
-
-    let html = "";
-    categories.forEach(c => {
-        html += `<button class="cat-btn" onclick="filterCategory('${c}')">${c}</button>`;
-    });
-
-    document.getElementById("categories").innerHTML = html;
-}
-
-// ==========================================
-// TAMPILKAN MOVIE / SERIES
-// ==========================================
-
-function showMovies(data) {
-    let html = "";
-
-    data.forEach(m => {
-        html += `
-        <div class="card" onclick="openDetail('${encodeURIComponent(m.title)}')">
+// ------------------------------
+// RENDER MOVIE LIST
+// ------------------------------
+function renderMovies(list) {
+    moviesEl.innerHTML = list
+        .map(m => `
+        <div class="card" onclick="openMovie('${encodeURIComponent(m.title)}')">
             <img src="${m.poster}" alt="${m.title}">
             <div class="title">${m.title}</div>
-        </div>`;
-    });
-
-    document.getElementById("movies").innerHTML = html;
+        </div>
+    `)
+    .join("");
 }
 
-// ==========================================
-// FILTER KATEGORI
-// ==========================================
-
+// ------------------------------
+// FILTER CATEGORY
+// ------------------------------
 function filterCategory(cat) {
-    fetch(url).then(res => res.json()).then(data => {
-        const filtered = data.filter(m => m.genre === cat);
-        showMovies(filtered);
-    });
+    const filtered = window.ALL_MOVIES.filter(m => m.genre === cat);
+    renderMovies(filtered);
 }
 
-// ==========================================
-// SEARCH
-// ==========================================
-
-function setupSearch(data) {
-    const input = document.getElementById("search");
-
-    input.addEventListener("input", () => {
-        const q = input.value.toLowerCase();
-
-        const filtered = data.filter(m =>
-            m.title.toLowerCase().includes(q)
-        );
-
-        showMovies(filtered);
-    });
+// ------------------------------
+// OPEN MOVIE / SERIES
+// ------------------------------
+function openMovie(title) {
+    window.location.href = "player.html?title=" + title;
 }
 
-// ==========================================
-// BUKA PLAYER
-// ==========================================
+// ------------------------------
+// PLAYER PAGE SYSTEM
+// ------------------------------
+function loadPlayer() {
+    const p = new URLSearchParams(window.location.search);
+    const title = decodeURIComponent(p.get("title"));
 
-function openDetail(title) {
-    window.location.href = "/player.html?title=" + title;
-}
+    if (!title || !window.ALL_MOVIES) return;
 
-// ==========================================
-// PLAYER PAGE
-// ==========================================
+    const movie = window.ALL_MOVIES.find(m => m.title === title);
 
-if (window.location.pathname.includes("player.html")) {
-    const params = new URLSearchParams(window.location.search);
-    const title = decodeURIComponent(params.get("title"));
+    if (!movie) return;
 
-    fetch(url).then(res => res.json()).then(data => {
-        const movie = data.find(m => m.title === title);
+    document.getElementById("title").innerText = movie.title;
 
-        document.getElementById("title").innerText = movie.title;
+    if (movie.type === "movie") {
         document.getElementById("videoFrame").src = movie.embed;
-    });
+        document.getElementById("info").innerText = movie.genre + " • " + movie.year;
+    }
+
+    // SERIES MODE
+    if (movie.type === "series") {
+        let html = "";
+        movie.episodes.forEach(ep => {
+            html += `
+            <button class="ep-btn" onclick="changeEp('${ep.embed}')">
+                ${ep.ep}
+            </button>`;
+        });
+
+        document.getElementById("recommend").innerHTML = html;
+        document.getElementById("videoFrame").src = movie.episodes[0].embed;
+    }
 }
 
-// ==========================================
-// START
-// ==========================================
+function changeEp(url) {
+    document.getElementById("videoFrame").src = url;
+}
 
-loadMovies();
+// -----------------------------
+
+// AUTO RUN
+if (document.getElementById("movies")) loadMovies();
+if (document.getElementById("videoFrame")) setTimeout(loadPlayer, 300);
