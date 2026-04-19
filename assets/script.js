@@ -26,15 +26,15 @@ async function loadMovies() {
             `<button class="cat" onclick="filterCategory('${c}')">${c}</button>`
         ).join("");
 
+        window.ALL_MOVIES = data;
         renderMovies(data);
 
+        // SEARCH
         searchEl.addEventListener("input", () => {
             const key = searchEl.value.toLowerCase();
             const filter = data.filter(m => m.title.toLowerCase().includes(key));
             renderMovies(filter);
         });
-
-        window.ALL_MOVIES = data;
 
     } catch (e) {
         loadingEl.innerHTML = "Gagal Memuat Data";
@@ -47,7 +47,9 @@ async function loadMovies() {
 function renderMovies(list) {
     moviesEl.innerHTML = list
         .map(m => `
-        <div class="card" onclick="openMovie('${encodeURIComponent(m.title)}')">
+        <div class="card"
+            onclick="openMovie('${encodeURIComponent(m.embed)}','${encodeURIComponent(m.title)}')">
+            
             <img src="${m.poster}" alt="${m.title}">
             <div class="title">${m.title}</div>
         </div>
@@ -66,8 +68,8 @@ function filterCategory(cat) {
 // ------------------------------
 // OPEN MOVIE / SERIES
 // ------------------------------
-function openMovie(title) {
-    window.location.href = "player.html?title=" + title;
+function openMovie(embed, title) {
+    window.location.href = "player.html?play=" + embed + "&title=" + title;
 }
 
 // ------------------------------
@@ -75,42 +77,49 @@ function openMovie(title) {
 // ------------------------------
 function loadPlayer() {
     const p = new URLSearchParams(window.location.search);
+    const embed = decodeURIComponent(p.get("play"));
     const title = decodeURIComponent(p.get("title"));
 
-    if (!title || !window.ALL_MOVIES) return;
+    if (!embed) return;
 
-    const movie = window.ALL_MOVIES.find(m => m.title === title);
+    // SET TITLE
+    document.getElementById("title").innerText = title;
 
-    if (!movie) return;
+    // CARI MOVIE DATA
+    fetch(JSON_URL)
+        .then(r => r.json())
+        .then(db => {
+            const movie = db.find(m => m.title === title);
+            if (!movie) return;
 
-    document.getElementById("title").innerText = movie.title;
+            document.getElementById("info").innerText = movie.genre + " • " + movie.year;
 
-    if (movie.type === "movie") {
-        document.getElementById("videoFrame").src = movie.embed;
-        document.getElementById("info").innerText = movie.genre + " • " + movie.year;
-    }
+            // MOVIE
+            if (movie.type === "movie") {
+                document.getElementById("videoFrame").src = embed;
+            }
 
-    // SERIES MODE
-    if (movie.type === "series") {
-        let html = "";
-        movie.episodes.forEach(ep => {
-            html += `
-            <button class="ep-btn" onclick="changeEp('${ep.embed}')">
-                ${ep.ep}
-            </button>`;
+            // SERIES
+            if (movie.type === "series") {
+                let html = "";
+                movie.episodes.forEach(ep => {
+                    html += `
+                        <button class="ep-btn" onclick="changeEp('${ep.embed}')">${ep.ep}</button>
+                    `;
+                });
+
+                document.getElementById("recommend").innerHTML = html;
+                document.getElementById("videoFrame").src = movie.episodes[0].embed;
+            }
         });
-
-        document.getElementById("recommend").innerHTML = html;
-        document.getElementById("videoFrame").src = movie.episodes[0].embed;
-    }
 }
 
 function changeEp(url) {
     document.getElementById("videoFrame").src = url;
 }
 
-// -----------------------------
-
+// ------------------------------
 // AUTO RUN
+// ------------------------------
 if (document.getElementById("movies")) loadMovies();
 if (document.getElementById("videoFrame")) setTimeout(loadPlayer, 300);
