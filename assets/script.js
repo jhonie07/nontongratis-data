@@ -1,125 +1,92 @@
-// URL JSON
-const JSON_URL = "https://nontongratis.online/movies.json";
+// JSON kamu
+const DATA_URL = "https://raw.githubusercontent.com/jhonie07/nontongratis/main/movies.json";
 
-// ELEMENT
-const moviesEl = document.getElementById("movies");
-const categoriesEl = document.getElementById("categories");
-const searchEl = document.getElementById("search");
-const loadingEl = document.getElementById("loading");
+// ======== HALAMAN INDEX ========
+if (document.getElementById("movies")) {
+    loadIndex();
+}
 
-// ------------------------------
-// LOAD MOVIES
-// ------------------------------
-async function loadMovies() {
+async function loadIndex() {
+    const moviesBox = document.getElementById("movies");
+    const catsBox = document.getElementById("categories");
+    const loading = document.getElementById("loading");
+
     try {
-        loadingEl.style.display = "block";
-
-        const res = await fetch(JSON_URL + "?v=" + Date.now()); // anti-cache
+        const res = await fetch(DATA_URL);
         const data = await res.json();
+        loading.style.display = "none";
 
-        loadingEl.style.display = "none";
+        window.DB = data;
 
-        // GROUP CATEGORY
-        const categories = [...new Set(data.map(m => m.genre))];
-
-        categoriesEl.innerHTML = categories.map(c =>
-            `<button class="cat" onclick="filterCategory('${c}')">${c}</button>`
+        // KATEGORI
+        const genres = [...new Set(data.map(x => x.genre))];
+        catsBox.innerHTML = genres.map(g =>
+            `<button class="cat-btn" onclick="filterGenre('${g}')">${g}</button>`
         ).join("");
 
-        window.ALL_MOVIES = data;
+        // LIST FILM
         renderMovies(data);
 
         // SEARCH
-        searchEl.addEventListener("input", () => {
-            const key = searchEl.value.toLowerCase();
-            const filter = data.filter(m => m.title.toLowerCase().includes(key));
-            renderMovies(filter);
+        document.getElementById("search").addEventListener("input", e => {
+            const key = e.target.value.toLowerCase();
+            const filtered = data.filter(x => x.title.toLowerCase().includes(key));
+            renderMovies(filtered);
         });
 
-    } catch (e) {
-        loadingEl.innerHTML = "Gagal Memuat Data";
+    } catch {
+        loading.innerHTML = "Gagal memuat data...";
     }
 }
 
-// ------------------------------
-// RENDER MOVIE LIST
-// ------------------------------
 function renderMovies(list) {
-    moviesEl.innerHTML = list
-        .map(m => `
-        <div class="card"
-            onclick="openMovie('${encodeURIComponent(m.embed)}','${encodeURIComponent(m.title)}')">
-            
-            <img src="${m.poster}" alt="${m.title}">
-            <div class="title">${m.title}</div>
+    document.getElementById("movies").innerHTML = list.map(m => `
+        <div class="movie-card"
+             onclick="location.href='player.html?title=${encodeURIComponent(m.title)}'">
+            <img src="${m.poster}">
+            <div class="movie-title">${m.title}</div>
         </div>
-    `)
-    .join("");
+    `).join("");
 }
 
-// ------------------------------
-// FILTER CATEGORY
-// ------------------------------
-function filterCategory(cat) {
-    const filtered = window.ALL_MOVIES.filter(m => m.genre === cat);
+function filterGenre(g) {
+    const filtered = window.DB.filter(m => m.genre === g);
     renderMovies(filtered);
 }
 
-// ------------------------------
-// OPEN MOVIE / SERIES
-// ------------------------------
-function openMovie(embed, title) {
-    window.location.href = "player.html?play=" + embed + "&title=" + title;
+
+// ======== HALAMAN PLAYER ========
+if (document.getElementById("videoFrame")) {
+    loadPlayer();
 }
 
-// ------------------------------
-// PLAYER PAGE SYSTEM
-// ------------------------------
-function loadPlayer() {
-    const p = new URLSearchParams(window.location.search);
-    const embed = decodeURIComponent(p.get("play"));
-    const title = decodeURIComponent(p.get("title"));
+async function loadPlayer() {
+    const q = new URLSearchParams(location.search);
+    const title = decodeURIComponent(q.get("title"));
 
-    if (!embed) return;
+    const res = await fetch(DATA_URL);
+    const data = await res.json();
 
-    // SET TITLE
-    document.getElementById("title").innerText = title;
+    const m = data.find(x => x.title === title);
 
-    // CARI MOVIE DATA
-    fetch(JSON_URL)
-        .then(r => r.json())
-        .then(db => {
-            const movie = db.find(m => m.title === title);
-            if (!movie) return;
+    document.getElementById("title").innerText = m.title;
+    document.getElementById("info").innerText = m.genre + " • " + m.year;
 
-            document.getElementById("info").innerText = movie.genre + " • " + movie.year;
+    // MOVIE
+    if (m.type === "movie") {
+        document.getElementById("videoFrame").src = m.embed;
+    }
 
-            // MOVIE
-            if (movie.type === "movie") {
-                document.getElementById("videoFrame").src = embed;
-            }
+    // SERIES
+    if (m.type === "series") {
+        document.getElementById("videoFrame").src = m.episodes[0].embed;
 
-            // SERIES
-            if (movie.type === "series") {
-                let html = "";
-                movie.episodes.forEach(ep => {
-                    html += `
-                        <button class="ep-btn" onclick="changeEp('${ep.embed}')">${ep.ep}</button>
-                    `;
-                });
-
-                document.getElementById("recommend").innerHTML = html;
-                document.getElementById("videoFrame").src = movie.episodes[0].embed;
-            }
-        });
+        document.getElementById("episodes").innerHTML = m.episodes.map(ep => `
+            <button onclick="changeEp('${ep.embed}')">${ep.ep}</button>
+        `).join("");
+    }
 }
 
 function changeEp(url) {
     document.getElementById("videoFrame").src = url;
 }
-
-// ------------------------------
-// AUTO RUN
-// ------------------------------
-if (document.getElementById("movies")) loadMovies();
-if (document.getElementById("videoFrame")) setTimeout(loadPlayer, 300);
