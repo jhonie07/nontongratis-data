@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let allMovies = [];
     let allSeries = [];
     let categories = [];
+    let trendingItem = null;
 
     // ============ FETCH DATA ============
     async function fetchMovies() {
@@ -19,6 +20,15 @@ document.addEventListener("DOMContentLoaded", function () {
             allMovies = data.filter(item => item.type === "movie");
             allSeries = data.filter(item => item.type === "series");
             
+            // Tentukan TRENDING (item pertama atau terbaru berdasarkan tahun)
+            const allItems = [...allMovies, ...allSeries];
+            // Sort by year (terbaru dulu)
+            allItems.sort((a, b) => (b.year || 0) - (a.year || 0));
+            trendingItem = allItems[0] || null;
+            
+            // Setup Hero dengan trending item
+            setupHero(trendingItem);
+            
             // Ambil kategori unik
             const genreSet = new Set();
             data.forEach(item => {
@@ -34,9 +44,74 @@ document.addEventListener("DOMContentLoaded", function () {
             
         } catch (error) {
             console.error("❌ Error fetch:", error);
+            useFallbackData();
         } finally {
             if (loading) loading.style.display = "none";
         }
+    }
+
+    // ============ FALLBACK DATA ============
+    function useFallbackData() {
+        console.warn("⚠️ Menggunakan data fallback");
+        allMovies = [
+            { type: "movie", title: "Bodyguard 3", year: "2025", genre: "Action", poster: "https://raw.githubusercontent.com/jhonie07/nontongratis/main/bodyguard.jpg", embed: "https://www.dailymotion.com/embed/video/x9e11se" }
+        ];
+        allSeries = [];
+        trendingItem = allMovies[0];
+        setupHero(trendingItem);
+        categories = ["Action"];
+        renderCategories();
+        renderMovies(allMovies);
+        renderSeries(allSeries);
+    }
+
+    // ============ SETUP HERO DINAMIS ============
+    function setupHero(item) {
+        if (!item) return;
+        
+        const heroVideo = document.getElementById("heroVideo");
+        const heroTitle = document.getElementById("heroTitle");
+        const heroInfo = document.getElementById("heroInfo");
+        const heroBtn = document.getElementById("heroWatchBtn");
+        
+        if (!heroVideo || !heroTitle || !heroInfo || !heroBtn) return;
+        
+        // Set judul dan info
+        heroTitle.textContent = `🔥 ${item.title}`;
+        heroInfo.textContent = `${item.year || "2024"} • ${item.genre || "Action"} • ${item.type === "series" ? "Series" : "Movie"}`;
+        
+        // Set video source (Dailymotion embed)
+        let videoUrl = "";
+        
+        if (item.type === "series" && item.episodes && item.episodes.length > 0) {
+            // Untuk series, ambil episode pertama
+            videoUrl = item.episodes[0].embed;
+        } else if (item.embed) {
+            videoUrl = item.embed;
+        }
+        
+        // Konversi ke format embed Dailymotion jika perlu
+        if (videoUrl && videoUrl.includes("dailymotion.com/video/")) {
+            const videoId = videoUrl.split("/video/")[1].split("?")[0];
+            videoUrl = `https://www.dailymotion.com/embed/video/${videoId}`;
+        }
+        
+        // Set iframe src dengan parameter autoplay & mute
+        if (videoUrl) {
+            heroVideo.src = `${videoUrl}?autoplay=1&mute=1&controls=0&loop=0`;
+        } else {
+            // Fallback ke trailer default
+            heroVideo.src = "https://www.dailymotion.com/embed/video/x9e11se?autoplay=1&mute=1&controls=0";
+        }
+        
+        // Set tombol action
+        heroBtn.onclick = () => {
+            // Simpan trending item ke localStorage dan buka player
+            localStorage.setItem("currentMovie", JSON.stringify(item));
+            window.location.href = "player.html";
+        };
+        
+        console.log("✅ Hero setup dengan:", item.title);
     }
 
     // ============ RENDER KATEGORI ============
@@ -154,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "player.html";
     }
 
-    // ============ PLAYER PAGE ============
+    // ============ PLAYER PAGE LOGIC ============
     const videoFrame = document.getElementById("videoFrame");
     const titleEl = document.getElementById("title");
     const infoEl = document.getElementById("info");
@@ -177,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
             videoFrame.src = embedUrl + "?autoplay=1";
         }
         
-        // Render episodes untuk series
+        // Render episodes
         if (episodesContainer) {
             episodesContainer.innerHTML = "";
             const episodeTitle = document.getElementById("Episode");
@@ -189,6 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const btn = document.createElement("button");
                     btn.className = "episode-btn";
                     btn.textContent = ep.ep || `Episode ${i+1}`;
+                    if (i === 0) btn.classList.add("active");
                     btn.onclick = () => {
                         let embedUrl = ep.embed;
                         if (embedUrl.includes("dailymotion.com/video/")) {
@@ -240,7 +316,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Init
+    // ============ INIT ============
     fetchMovies();
-    console.log("✅ Script loaded - Dailymotion + Series support");
+    console.log("✅ Script loaded - Hero dinamis aktif");
 });
