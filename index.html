@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Nonton Gratis</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="assets/style.css">
+    <meta charset="UTF-8">
+    <title>Nonton Gratis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
-
 <body>
 
 <header>
@@ -15,22 +13,36 @@
     <input type="text" id="search" placeholder="Cari film...">
 </header>
 
-<section id="hero"></section>
+<!-- HERO SECTION (BISA DIISI GAMBAR BESAR) -->
+<section id="hero">
+    <div class="hero-content">
+        <h2>Selamat Datang</h2>
+        <p>Nonton film favoritmu gratis di sini</p>
+    </div>
+</section>
+
+<!-- SLOT IKLAN -->
 <div id="bannerTop"></div>
 <div id="bannerHome"></div>
-<div id="bannerBottom"></div>
+
 <h2 class="section-title">Kategori</h2>
 <div id="categories"></div>
 
+<h2 class="section-title">Film Terbaru</h2>
 <div id="movies"></div>
+
+<!-- SLOT IKLAN BAWAH -->
+<div id="bannerBottom"></div>
 
 <!-- MODAL DETAIL -->
 <div id="modal" class="modal">
-  <div class="modal-content" id="modalBody"></div>
+    <div class="modal-content" id="modalBody"></div>
 </div>
 
 <div id="loading">Loading...</div>
 
+<!-- JAVASCRIPT -->
+<script src="assets/ads.js"></script>
 <script src="assets/script.js"></script>
 </body>
 </html>
