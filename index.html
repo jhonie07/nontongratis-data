@@ -2,47 +2,78 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Nonton Gratis</title>
+    <title>Nonton Gratis - Streaming Film Sub Indo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/style.css">
+    
+    <!-- Preconnect untuk performa -->
+    <link rel="preconnect" href="https://www.highperformanceformat.com">
+    <link rel="preconnect" href="https://www.youtube.com">
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
-    <h1 class="logo">NONTON GRATIS</h1>
-    <input type="text" id="search" placeholder="Cari film...">
+    <h1 class="logo">🎬 NONTON GRATIS</h1>
+    <input type="text" id="search" placeholder="🔍 Cari film...">
 </header>
 
-<!-- HERO SECTION (BISA DIISI GAMBAR BESAR) -->
+<!-- ============ HERO VIDEO SECTION ============ -->
 <section id="hero">
-    <div class="hero-content">
-        <h2>Selamat Datang</h2>
-        <p>Nonton film favoritmu gratis di sini</p>
+    <div class="hero-video-wrapper">
+        <iframe 
+            id="heroVideo"
+            src="https://www.youtube.com/embed/4Dl5K7k4qBc?autoplay=1&mute=1&controls=0&loop=1&playlist=4Dl5K7k4qBc&modestbranding=1&showinfo=0&rel=0" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+        <div class="hero-overlay">
+            <h2>🔥 SEDANG TRENDING</h2>
+            <p>Extraction 2 - Action Terbaru 2024</p>
+            <button class="hero-btn" onclick="document.getElementById('heroVideo').src += '&autoplay=1'">▶ Tonton Trailer</button>
+        </div>
     </div>
 </section>
 
-<!-- SLOT IKLAN -->
-<div id="bannerTop"></div>
-<div id="bannerHome"></div>
+<!-- ============ BANNER IKLAN ATAS (ADSTERRA 300x250) ============ -->
+<div class="ad-container">
+    <div id="bannerTop" class="ad-slot"></div>
+</div>
 
-<h2 class="section-title">Kategori</h2>
+<!-- ============ KATEGORI ============ -->
+<h2 class="section-title">📂 Kategori</h2>
 <div id="categories"></div>
 
-<h2 class="section-title">Film Terbaru</h2>
+<!-- ============ FILM TERBARU ============ -->
+<h2 class="section-title">🎥 Film Terbaru</h2>
 <div id="movies"></div>
 
-<!-- SLOT IKLAN BAWAH -->
-<div id="bannerBottom"></div>
+<!-- ============ BANNER IKLAN TENGAH (ADSTERRA 300x250) ============ -->
+<div class="ad-container">
+    <div id="bannerHome" class="ad-slot"></div>
+</div>
+
+<!-- ============ SERIES TERBARU ============ -->
+<h2 class="section-title">📺 Series Terbaru</h2>
+<div id="series"></div>
+
+<!-- ============ BANNER IKLAN BAWAH (ADSTERRA 300x250) ============ -->
+<div class="ad-container">
+    <div id="bannerBottom" class="ad-slot"></div>
+</div>
 
 <!-- MODAL DETAIL -->
 <div id="modal" class="modal">
     <div class="modal-content" id="modalBody"></div>
 </div>
 
-<div id="loading">Loading...</div>
+<!-- LOADING -->
+<div id="loading">⏳ Loading...</div>
 
 <!-- JAVASCRIPT -->
 <script src="assets/ads.js"></script>
 <script src="assets/script.js"></script>
+
 </body>
 </html>
