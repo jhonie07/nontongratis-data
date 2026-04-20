@@ -1,42 +1,109 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Player</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="assets/style.css">
-
-<style>
-.player-box {
-    width: 100%;
-    height: 70vh;
-    background: #000;
-}
-.player-box iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <title>Player - Nonton Gratis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        .player-box {
+            width: 100%;
+            height: 70vh;
+            background: #000;
+            position: relative;
+        }
+        .player-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #bannerPlayer {
+            margin: 15px 0;
+            text-align: center;
+            min-height: 90px;
+            background: #111;
+        }
+        #title {
+            padding: 15px 15px 5px;
+            margin: 0;
+            color: #fff;
+        }
+        #info {
+            padding: 0 15px 15px;
+            margin: 0;
+            color: #aaa;
+            font-size: 14px;
+        }
+        h3 {
+            padding: 0 15px;
+            margin: 20px 0 10px;
+            color: #fff;
+        }
+        #episodes, #recommend {
+            padding: 0 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .episode-btn, .rec-card {
+            background: #222;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+        }
+        .episode-btn:hover, .rec-card:hover {
+            background: #e50914;
+        }
+        .rec-card {
+            width: 120px;
+            text-align: center;
+        }
+        .rec-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="player-box">
-    <iframe id="videoFrame" allowfullscreen></iframe>
-    <div id="bannerPlayer"></div>
+    <iframe id="videoFrame" allowfullscreen allow="autoplay; encrypted-media" scrolling="no"></iframe>
 </div>
 
-<h2 id="title"></h2>
-<p id="info"></p>
+<!-- IKLAN DI PLAYER -->
+<div id="bannerPlayer"></div>
 
-<h3>Episode</h3>
-<div id="episodes"></div>
+<h2 id="title">Judul Film</h2>
+<p id="info">Tahun • Genre • Durasi</p>
 
-<h3>Rekomendasi</h3>
-<div id="recommend"></div>
+<h3>📺 Daftar Episode</h3>
+<div id="episodes">
+    <button class="episode-btn">Episode 1</button>
+    <button class="episode-btn">Episode 2</button>
+    <button class="episode-btn">Episode 3</button>
+</div>
 
+<h3>🎬 Rekomendasi</h3>
+<div id="recommend">
+    <div class="rec-card">
+        <img src="https://via.placeholder.com/120x160/333/fff?text=Film+1" alt="Film">
+        <span>Film 1</span>
+    </div>
+    <div class="rec-card">
+        <img src="https://via.placeholder.com/120x160/333/fff?text=Film+2" alt="Film">
+        <span>Film 2</span>
+    </div>
+    <div class="rec-card">
+        <img src="https://via.placeholder.com/120x160/333/fff?text=Film+3" alt="Film">
+        <span>Film 3</span>
+    </div>
+</div>
+
+<script src="assets/ads.js"></script>
 <script src="assets/script.js"></script>
-
+</body>
 </html>
