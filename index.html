@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/style.css">
     
-    <!-- Preconnect untuk performa -->
+    <!-- Preconnect -->
     <link rel="preconnect" href="https://www.highperformanceformat.com">
-    <link rel="preconnect" href="https://www.youtube.com">
+    <link rel="preconnect" href="https://pl29191016.profitablecpmratenetwork.com">
+    <link rel="preconnect" href="https://pl29191017.profitablecpmratenetwork.com">
 </head>
 <body>
 
@@ -18,25 +19,25 @@
     <input type="text" id="search" placeholder="🔍 Cari film...">
 </header>
 
-<!-- ============ HERO VIDEO SECTION ============ -->
+<!-- ============ HERO VIDEO SECTION (DINAMIS) ============ -->
 <section id="hero">
     <div class="hero-video-wrapper">
         <iframe 
             id="heroVideo"
-            src="https://www.youtube.com/embed/4Dl5K7k4qBc?autoplay=1&mute=1&controls=0&loop=1&playlist=4Dl5K7k4qBc&modestbranding=1&showinfo=0&rel=0" 
+            src="" 
             frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
             allowfullscreen>
         </iframe>
         <div class="hero-overlay">
-            <h2>🔥 SEDANG TRENDING</h2>
-            <p>Extraction 2 - Action Terbaru 2024</p>
-            <button class="hero-btn" onclick="document.getElementById('heroVideo').src += '&autoplay=1'">▶ Tonton Trailer</button>
+            <h2 id="heroTitle">🔥 SEDANG TRENDING</h2>
+            <p id="heroInfo">Loading...</p>
+            <button class="hero-btn" id="heroWatchBtn">▶ Tonton Sekarang</button>
         </div>
     </div>
 </section>
 
-<!-- ============ BANNER IKLAN ATAS (ADSTERRA 300x250) ============ -->
+<!-- ============ BANNER IKLAN ATAS ============ -->
 <div class="ad-container">
     <div id="bannerTop" class="ad-slot"></div>
 </div>
@@ -49,7 +50,7 @@
 <h2 class="section-title">🎥 Film Terbaru</h2>
 <div id="movies"></div>
 
-<!-- ============ BANNER IKLAN TENGAH (ADSTERRA 300x250) ============ -->
+<!-- ============ BANNER IKLAN TENGAH ============ -->
 <div class="ad-container">
     <div id="bannerHome" class="ad-slot"></div>
 </div>
@@ -58,7 +59,7 @@
 <h2 class="section-title">📺 Series Terbaru</h2>
 <div id="series"></div>
 
-<!-- ============ BANNER IKLAN BAWAH (ADSTERRA 300x250) ============ -->
+<!-- ============ BANNER IKLAN BAWAH ============ -->
 <div class="ad-container">
     <div id="bannerBottom" class="ad-slot"></div>
 </div>
