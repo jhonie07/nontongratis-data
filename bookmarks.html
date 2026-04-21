@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookmarks - Nonton Gratis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#e50914">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="/" class="back-btn">← Kembali</a>
+            <h1 class="logo">🔖 Bookmarks</h1>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" id="clearBookmarksBtn" aria-label="Clear All">🗑️ Hapus Semua</button>
+        </div>
+    </header>
+
+    <main class="bookmarks-page">
+        <div id="bookmarksList" class="movie-grid">
+            <p class="empty-message">Loading bookmarks...</p>
+        </div>
+        
+        <div id="emptyBookmarks" class="empty-state" style="display: none;">
+            <div class="empty-icon">📭</div>
+            <h2>Belum ada film yang disimpan</h2>
+            <p>Klik tombol 🔖 pada film untuk menyimpannya di sini.</p>
+            <a href="/" class="btn-primary">Jelajahi Film</a>
+        </div>
+    </main>
+
+    <script src="assets/script.js"></script>
+    <script>
+        // Bookmarks specific logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const bookmarks = JSON.parse(localStorage.getItem('nontongratis_bookmarks') || '[]');
+            const container = document.getElementById('bookmarksList');
+            const emptyState = document.getElementById('emptyBookmarks');
+            
+            if (bookmarks.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            container.style.display = 'grid';
+            emptyState.style.display = 'none';
+            
+            // Render bookmarks
+            container.innerHTML = '';
+            bookmarks.forEach(item => {
+                const card = createBookmarkCard(item);
+                container.appendChild(card);
+            });
+        });
+        
+        document.getElementById('clearBookmarksBtn')?.addEventListener('click', () => {
+            if (confirm('Hapus semua bookmark?')) {
+                localStorage.removeItem('nontongratis_bookmarks');
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+</html>
