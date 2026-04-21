@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Film - Nonton Gratis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#e50914">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="/" class="back-btn">← Kembali</a>
+            <h1 class="logo">📝 Request Film</h1>
+        </div>
+    </header>
+
+    <main class="request-page">
+        <div class="request-container">
+            <p class="request-intro">Tidak menemukan film yang kamu cari? Request di sini! Kami akan berusaha menambahkannya secepat mungkin.</p>
+            
+            <form id="requestForm" class="request-form">
+                <div class="form-group">
+                    <label>Judul Film/Series *</label>
+                    <input type="text" id="requestTitle" placeholder="Contoh: Avengers Endgame" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipe *</label>
+                    <select id="requestType" required>
+                        <option value="movie">Film</option>
+                        <option value="series">Series</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tahun (Opsional)</label>
+                    <input type="text" id="requestYear" placeholder="Contoh: 2024">
+                </div>
+                
+                <div class="form-group">
+                    <label>Link Referensi (Opsional)</label>
+                    <input type="url" id="requestLink" placeholder="https://www.imdb.com/...">
+                </div>
+                
+                <div class="form-group">
+                    <label>Catatan Tambahan</label>
+                    <textarea id="requestNote" rows="4" placeholder="Tulis catatan tambahan di sini..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary">📤 Kirim Request</button>
+            </form>
+            
+            <div id="requestSuccess" class="success-message" style="display: none;">
+                <div class="success-icon">✅</div>
+                <h3>Request Terkirim!</h3>
+                <p>Terima kasih atas request kamu. Kami akan segera memprosesnya.</p>
+                <a href="/" class="btn-secondary">Kembali ke Home</a>
+            </div>
+            
+            <div class="recent-requests">
+                <h3>📋 Film yang Sering Direquest</h3>
+                <ul id="popularRequests">
+                    <li>Loading...</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('requestForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                title: document.getElementById('requestTitle').value,
+                type: document.getElementById('requestType').value,
+                year: document.getElementById('requestYear').value,
+                link: document.getElementById('requestLink').value,
+                note: document.getElementById('requestNote').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Save to localStorage (simulasi)
+            const requests = JSON.parse(localStorage.getItem('nontongratis_requests') || '[]');
+            requests.push(formData);
+            localStorage.setItem('nontongratis_requests', JSON.stringify(requests));
+            
+            // Show success
+            document.getElementById('requestForm').style.display = 'none';
+            document.getElementById('requestSuccess').style.display = 'block';
+            
+            console.log('Request saved:', formData);
+        });
+        
+        // Load popular requests
+        const requests = JSON.parse(localStorage.getItem('nontongratis_requests') || '[]');
+        const popularList = document.getElementById('popularRequests');
+        
+        if (requests.length > 0) {
+            popularList.innerHTML = '';
+            requests.slice(-5).reverse().forEach(req => {
+                const li = document.createElement('li');
+                li.textContent = `${req.type === 'movie' ? '🎬' : '📺'} ${req.title} (${req.year || 'N/A'})`;
+                popularList.appendChild(li);
+            });
+        } else {
+            popularList.innerHTML = '<li>Belum ada request</li>';
+        }
+    </script>
+</body>
+</html>
