@@ -73,6 +73,46 @@
       {
         "ep": "Episode 9",
         "embed": "https://www.dailymotion.com/embed/video/xa5tnz6"
+      },
+        {
+    "type": "series",
+    "title": "high school heroes",
+    "poster": "https://www.dailymotion.com/thumbnail/video/x9mzmai",
+    "genre": "Action",
+    "year": "2025",
+    "episodes": [
+      {
+        "ep": "Episode 1",
+        "embed": "https://www.dailymotion.com/embed/video/x9mzmai"
+      },
+      {
+        "ep": "Episode 2",
+        "embed": "https://www.dailymotion.com/embed/video/x9mzo3c"
+      },
+      {
+        "ep": "Episode 3",
+        "embed": "https://www.dailymotion.com/embed/video/x9mzvkk"
+      },
+      {
+        "ep": "Episode 4",
+        "embed": "https://www.dailymotion.com/embed/video/x9mzxlo"
+      },
+      {
+        "ep": "Episode 5",
+        "embed": "https://www.dailymotion.com/embed/video/x9n51ye"
+      },
+      {
+        "ep": "Episode 6",
+        "embed": "https://www.dailymotion.com/embed/video/x9n523o"
+      },
+      {
+        "ep": "Episode 7",
+        "embed": "https://www.dailymotion.com/embed/video/x9n5998"
+      },
+      {
+        "ep": "Episode 8",
+        "embed": "https://www.dailymotion.com/embed/video/x9n59ra"
+
       }
     ]
   }
