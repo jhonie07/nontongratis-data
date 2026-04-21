@@ -543,7 +543,7 @@ header {
 /* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
     .header-center {
-        display: none;
+    
     }
     
     .movie-grid {
