@@ -1,4 +1,4 @@
-/* ============ NONTON GRATIS - FULL STYLE v2.0 ============ */
+/* ============ NONTON GRATIS - FULL STYLE v2.1 ============ */
 
 /* CSS Variables for Dark/Light Mode */
 :root {
@@ -47,23 +47,48 @@ header {
     justify-content: space-between;
     padding: 12px 16px;
     background: var(--header-bg);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 2px solid var(--accent);
     position: sticky;
     top: 0;
     z-index: 1000;
     backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.header-left, .header-right {
+.header-left {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .logo {
     font-size: 1.3rem;
     font-weight: bold;
     color: var(--accent);
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* ============ SEARCH - SELALU MUNCUL DI SEMUA DEVICE ============ */
+.header-center {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    min-width: 200px;
 }
 
 .search-wrapper {
@@ -73,26 +98,33 @@ header {
     border-radius: 25px;
     padding: 5px 5px 5px 15px;
     border: 1px solid var(--border);
+    width: 100%;
+    max-width: 400px;
 }
 
 .search-wrapper input {
     background: transparent;
     border: none;
     color: var(--text-primary);
-    padding: 8px 10px;
+    padding: 10px;
     font-size: 14px;
-    width: 250px;
+    width: 100%;
     outline: none;
+}
+
+.search-wrapper input::placeholder {
+    color: var(--text-secondary);
 }
 
 .search-btn {
     background: var(--accent);
     color: white;
     border: none;
-    padding: 8px 20px;
+    padding: 10px 20px;
     border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .icon-btn {
@@ -110,14 +142,6 @@ header {
 .icon-btn:hover {
     background: var(--accent);
     color: white;
-}
-
-.menu-toggle {
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    cursor: pointer;
 }
 
 /* ============ SIDEBAR ============ */
@@ -144,6 +168,18 @@ header {
     align-items: center;
     padding: 20px;
     border-bottom: 1px solid var(--border);
+}
+
+.sidebar-header h3 {
+    color: var(--accent);
+}
+
+.close-sidebar {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .sidebar-menu {
@@ -231,6 +267,11 @@ header {
     margin-bottom: 10px;
 }
 
+.hero-overlay p {
+    font-size: 1rem;
+    color: #ddd;
+}
+
 .hero-actions {
     display: flex;
     gap: 10px;
@@ -289,6 +330,39 @@ header {
     border-color: var(--accent);
 }
 
+/* ============ CONTENT SECTIONS ============ */
+.content-section {
+    margin: 20px 0;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px 5px;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    color: var(--accent);
+}
+
+.see-all {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.clear-history {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
 /* ============ MOVIE GRID ============ */
 .movie-grid {
     display: grid;
@@ -312,29 +386,27 @@ header {
     box-shadow: 0 10px 20px rgba(229, 9, 20, 0.2);
 }
 
+.card-image-wrapper {
+    position: relative;
+}
+
 .movie-card img {
     width: 100%;
     height: 200px;
     object-fit: cover;
     background: var(--bg-tertiary);
-    loading: lazy;
 }
 
-.movie-info {
-    padding: 12px;
-}
-
-.movie-info h3 {
-    font-size: 15px;
-    margin-bottom: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.movie-info p {
-    font-size: 12px;
-    color: var(--text-secondary);
+.rating-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--accent);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
 }
 
 .movie-actions {
@@ -362,16 +434,21 @@ header {
     backdrop-filter: blur(5px);
 }
 
-.rating-badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: var(--accent);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
+.movie-info {
+    padding: 12px;
+}
+
+.movie-info h3 {
+    font-size: 15px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-info p {
+    font-size: 12px;
+    color: var(--text-secondary);
 }
 
 /* ============ AD SLOTS ============ */
@@ -415,6 +492,11 @@ header {
     margin-bottom: 15px;
 }
 
+.footer-section p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
 .footer-section ul {
     list-style: none;
 }
@@ -425,6 +507,16 @@ header {
 
 .footer-section ul li a {
     color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-links a {
+    font-size: 1.5rem;
     text-decoration: none;
 }
 
@@ -538,122 +630,235 @@ header {
     align-items: center;
     justify-content: space-between;
     gap: 15px;
-}
-
-/* ============ RESPONSIVE ============ */
-@media (max-width: 768px) {
-    .header-center {
-    
-    }
-    
-    .movie-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    #hero {
-        height: 250px;
-    }
-    
-    .hero-overlay h2 {
-        font-size: 1.3rem;
-    }
-    
-    .footer-content {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .logo {
-        font-size: 1rem;
-    }
-    
-    #hero {
-        height: 200px;
-    }
-    
-    .hero-actions {
-        flex-direction: column;
-    }
-    
-    .hero-btn {
-        width: 100%;
-    }
-}
-
-/* ============ BOOKMARKS & REQUEST PAGE ============ */
-.bookmarks-page,
-.request-page {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.empty-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-}
-
-.request-container {
-    max-width: 600px;
-    margin: 20px auto;
-    background: var(--bg-secondary);
-    padding: 30px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-}
-
-.request-form .form-group {
-    margin-bottom: 20px;
-}
-
-.request-form label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--text-primary);
-}
-
-.request-form input,
-.request-form select,
-.request-form textarea {
-    width: 100%;
-    padding: 12px;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 14px;
+    flex-wrap: wrap;
 }
 
 .btn-primary {
-    width: 100%;
-    padding: 14px;
+    padding: 10px 20px;
     background: var(--accent);
     color: white;
     border: none;
-    border-radius: 30px;
+    border-radius: 25px;
     font-weight: bold;
     cursor: pointer;
 }
 
-.success-message {
+.btn-secondary {
+    padding: 10px 20px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+/* ============ EMPTY STATES ============ */
+.empty-message {
+    grid-column: 1 / -1;
     text-align: center;
-    padding: 30px;
+    padding: 40px;
+    color: var(--text-secondary);
 }
 
-.success-icon {
-    font-size: 3rem;
-    margin-bottom: 20px;
+/* ============ RESPONSIVE - MOBILE (SEARCH TETAP MUNCUL!) ============ */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px 15px;
+    }
+    
+    .header-left {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    /* HEADER CENTER - TETAP MUNCUL DI MOBILE! */
+    .header-center {
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .search-wrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .search-wrapper input {
+        width: 100%;
+    }
+    
+    .header-right {
+        display: none; /* Icon tambahan disembunyikan di mobile untuk hemat tempat */
+    }
+    
+    /* Hero */
+    #hero {
+        height: 250px;
+    }
+    
+    .hero-overlay {
+        padding: 25px 20px;
+    }
+    
+    .hero-overlay h2 {
+        font-size: 1.4rem;
+    }
+    
+    .hero-overlay p {
+        font-size: 0.9rem;
+    }
+    
+    .hero-badge {
+        font-size: 10px;
+        padding: 3px 10px;
+    }
+    
+    .hero-actions {
+        gap: 8px;
+    }
+    
+    .hero-btn {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+    
+    /* Grid */
+    .movie-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 12px 15px;
+    }
+    
+    .movie-card img {
+        height: 160px;
+    }
+    
+    /* Categories */
+    .categories-wrapper {
+        padding: 10px 15px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .category-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    /* Section Header */
+    .section-header {
+        padding: 10px 15px 5px;
+    }
+    
+    .section-title {
+        font-size: 1.2rem;
+    }
+    
+    /* Footer */
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
 }
 
-.recent-requests {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
+/* ============ RESPONSIVE - EXTRA SMALL (SEARCH TETAP MUNCUL!) ============ */
+@media (max-width: 480px) {
+    .logo {
+        font-size: 1.1rem;
+    }
+    
+    .menu-toggle {
+        font-size: 1.3rem;
+    }
+    
+    /* Search tetap full width */
+    .search-wrapper {
+        padding: 3px 3px 3px 12px;
+    }
+    
+    .search-wrapper input {
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    .search-btn {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+    
+    #hero {
+        height: 180px;
+    }
+    
+    .hero-overlay {
+        padding: 15px;
+    }
+    
+    .hero-overlay h2 {
+        font-size: 1.1rem;
+    }
+    
+    .hero-overlay p {
+        font-size: 0.8rem;
+    }
+    
+    .hero-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .movie-grid {
+        gap: 10px;
+        padding: 10px 12px;
+    }
+    
+    .movie-card img {
+        height: 140px;
+    }
+    
+    .movie-info {
+        padding: 8px;
+    }
+    
+    .movie-info h3 {
+        font-size: 13px;
+    }
+    
+    .movie-info p {
+        font-size: 11px;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+    }
+    
+    .ad-container {
+        min-height: 100px;
+        margin: 15px auto;
+    }
+}
+
+/* ============ LANDSCAPE MODE ============ */
+@media (max-width: 768px) and (orientation: landscape) {
+    #hero {
+        height: 200px;
+    }
+    
+    .movie-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
